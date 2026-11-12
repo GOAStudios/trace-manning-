@@ -12,6 +12,8 @@
   --red: #8b1a1a;          /* deep red: buttons, links, accents */
   --red-dark: #6a1212;
   --red-light: #e2685f;    /* red for use on dark backgrounds */
+  --oxblood: #2b0c0c;      /* near-black red: dark sections, footer */
+  --on-red: #f6dcd9;       /* soft text on red */
   --banner: #f5c518;       /* preview banner only */
   --lumber: #d9b98a;       /* photo placeholders */
 
@@ -521,6 +523,50 @@ p { margin: 0 0 1em; max-width: 38em; }
   .float-call:hover { color: #fff; background: var(--red-dark); }
   .site-footer { padding-bottom: 6rem; }
 }
+
+/* ---------- More red ---------- */
+
+.site-header { border-bottom: 4px solid var(--red); }
+
+.hero, .page-head { background: var(--red); color: #fff; border-bottom: 0; }
+.hero .lede, .page-head .lede { color: var(--on-red); }
+.hero .btn, .page-head .btn { background: #fff; border-color: #fff; color: var(--red); }
+.hero .btn:hover, .page-head .btn:hover { background: var(--on-red); border-color: var(--on-red); color: var(--red-dark); }
+.hero .btn-outline, .page-head .btn-outline { background: transparent; border-color: #fff; color: #fff; }
+.hero .btn-outline:hover, .page-head .btn-outline:hover { background: #fff; color: var(--red); }
+.hero :focus-visible, .page-head :focus-visible { outline-color: #fff; }
+.hero .photo { box-shadow: 0 0 0 6px rgba(255,255,255,.12); }
+
+/* Tape strip flips to white with red ticks so it pops under the red hero */
+.tape {
+  background-color: #fff;
+  background-image:
+    repeating-linear-gradient(90deg, var(--red) 0 2px, transparent 2px 96px),
+    repeating-linear-gradient(90deg, var(--red) 0 1.5px, transparent 1.5px 48px),
+    repeating-linear-gradient(90deg, rgba(139,26,26,.6) 0 1px, transparent 1px 12px);
+  border-top: 0;
+  border-bottom: 4px solid var(--red);
+}
+.tape-mark { color: var(--red); }
+
+.section.dark, .site-footer { background: var(--oxblood); }
+.section.dark .lede { color: #d9b3ae; }
+.site-footer { color: #d9b3ae; border-top: 6px solid var(--red); }
+.footer-base { border-top-color: #4a1d1d; }
+
+.cta-band { background: var(--red); color: #fff; }
+.cta-band .btn { background: #fff; border-color: #fff; color: var(--red); }
+.cta-band .btn:hover { background: var(--on-red); border-color: var(--on-red); color: var(--red-dark); }
+.cta-band .btn-outline { background: transparent; border-color: #fff; color: #fff; }
+.cta-band .btn-outline:hover { background: #fff; color: var(--red); }
+.cta-band :focus-visible { outline-color: #fff; }
+
+h2 { color: var(--red-dark); }
+.section.dark h2, .cta-band h2 { color: #fff; }
+.service-list, .facts, .faq { border-top-color: var(--red); }
+.service-list h3, .gallery figcaption strong { color: var(--red-dark); }
+.filter-bar button[aria-pressed="true"] { background: var(--red); border-color: var(--red); }
+.towns li { border-color: var(--red); color: var(--red-dark); }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
