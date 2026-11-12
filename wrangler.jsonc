@@ -1,6 +1,6 @@
 {
   // Cloudflare settings for the website.
-  "name": "trace-manning-construction",
+  "name": "manning-general-contractors",
   "main": "src/worker.js",
   "compatibility_date": "2026-11-01",
   "assets": {

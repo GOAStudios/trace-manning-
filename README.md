@@ -1,6 +1,6 @@
-# Trace Manning Construction website
+# Manning General Contractors website
 
-A six-page website for a general contractor: Home, Services, Projects, About, FAQ and Get a quote. It's plain HTML and CSS with no build step, hosted on Cloudflare.
+A six-page website for a general contractor with three service divisions (Residential Construction, Estimating & Preconstruction, Construction Consulting): Home, Services, Projects, About, FAQ and Get a quote. It's plain HTML and CSS with no build step, hosted on Cloudflare.
 
 **What it does**
 - Quote form that emails each request with the customer's photos attached, texts the owner, and logs the lead in a Google Sheet
@@ -75,7 +75,7 @@ The form already asks for a preferred date and time of day. For real calendar bo
 Cloudflare dashboard → **Analytics & Logs → Web Analytics → Add a site**. Pick the domain and choose automatic setup. No code changes are needed. It shows visits, pages and where visitors come from.
 
 ### 9. Google Business Profile (biggest win for "contractor near me" searches)
-1. Go to business.google.com and create or claim **Trace Manning Construction**. Use the same name and phone number as the website.
+1. Go to business.google.com and create or claim **Manning General Contractors**. Use the same name and phone number as the website.
 2. Category: **General contractor**. Add the service area towns, hours, website link and at least 10 job photos.
 3. Google verifies by video or postcard.
 4. Ask every happy customer for a Google review. That's what moves him up in local results.
@@ -88,7 +88,7 @@ Cloudflare dashboard → **Analytics & Logs → Web Analytics → Add a site**. 
 Paste this into Claude Code (or a Claude chat connected to this GitHub repo), then describe the change you want:
 
 ```
-This repo is my contractor business website (Trace Manning Construction).
+This repo is my contractor business website (Manning General Contractors).
 It's plain HTML/CSS/JS in /public, deployed to Cloudflare Workers from GitHub
 (pushing to main redeploys it). src/worker.js handles the quote form: it emails
 leads with photos via Resend, texts me via Twilio, and logs to a Google Sheet.

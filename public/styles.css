@@ -433,7 +433,7 @@ p { margin: 0 0 1em; max-width: 38em; }
 
 .site-footer { background: var(--asphalt); color: #b8bec3; padding: 3rem 0 2rem; font-size: 0.95rem; }
 .site-footer a { color: var(--plaster); }
-.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+.footer-grid { display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 0.8fr; gap: 2rem; margin-bottom: 2rem; }
 @media (max-width: 52rem) { .footer-grid { grid-template-columns: 1fr; } }
 .site-footer .brand { color: var(--plaster); display: inline-block; margin-bottom: 0.75rem; }
 .site-footer h3 { font-size: 1.125rem; color: var(--plaster); margin-bottom: 0.6rem; }
@@ -567,6 +567,46 @@ h2 { color: var(--red-dark); }
 .service-list h3, .gallery figcaption strong { color: var(--red-dark); }
 .filter-bar button[aria-pressed="true"] { background: var(--red); border-color: var(--red); }
 .towns li { border-color: var(--red); color: var(--red-dark); }
+
+/* ---------- Three service divisions ---------- */
+
+.divisions-tree {
+  height: 2.5rem; margin: 0 auto; width: calc(100% * 2 / 3);
+  border: 2px solid var(--red); border-bottom: 0; border-radius: 2px 2px 0 0;
+  position: relative;
+}
+.divisions-tree::before {
+  content: ""; position: absolute; left: 50%; top: -1.25rem; height: calc(100% + 1.25rem);
+  border-left: 2px solid var(--red); margin-left: -1px;
+}
+.divisions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.division {
+  background: var(--white); border: 1px solid var(--rule); border-top: 5px solid var(--red);
+  border-radius: 4px; padding: 1.5rem 1.5rem 1.75rem;
+}
+.division-num {
+  display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem;
+  background: var(--red); color: #fff; border-radius: 5px; font-weight: 800; margin-bottom: 1rem;
+}
+.division h3 { font-size: 1.6rem; padding-bottom: 0.85rem; margin-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+.division h3 a { color: var(--red-dark); text-decoration: none; }
+.division h3 a:hover { text-decoration: underline; }
+.division ul { list-style: none; margin: 0; padding: 0; }
+.division li { position: relative; padding-left: 1.1rem; margin-bottom: 0.55rem; }
+.division li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+
+@media (max-width: 52rem) {
+  .divisions-tree { display: none; }
+  .divisions { grid-template-columns: 1fr; }
+}
+
+.division-detail { scroll-margin-top: 5rem; }
+.offer-list { margin: 0; border-top: 2px solid var(--red); }
+.offer-list div { padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
+.offer-list dt { font-variation-settings: "wdth" 80; font-weight: 800; font-size: 1.3rem; color: var(--asphalt); }
+.offer-list dd { margin: 0.2rem 0 0; color: var(--concrete); }
+.footer-base p { margin: 0 0 0.4rem; max-width: none; }
+.footer-base .fine { font-size: 0.8125rem; opacity: 0.8; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
