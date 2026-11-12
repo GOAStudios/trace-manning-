@@ -2,7 +2,7 @@
 
 A five-page website for a general contractor: Home, Services, Projects, About, and Get a quote. It's plain HTML and CSS with no build step. It's hosted on Cloudflare, and the quote form emails each request to the owner through Resend.
 
-> **Status: preview.** The business name, phone, photos and text are samples. Search the files for `Hartwell`, `555`, `example.com`, `Springfield`, `GC-000000` and `[Owner name]` to find everything that needs to be replaced.
+> **Status: preview.** Name and phone are real; photos, reviews, license number, email, history and service area are samples. Search the files for `example.com`, `GC-000000`, `Sample reviewer`, `class="photo"` and `Northwest Florida` to find everything that needs to be replaced.
 
 ## What's where
 
