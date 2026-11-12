@@ -8,7 +8,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Get a quote | Trace Manning Construction">
+<meta property="og:description" content="Request a free estimate from Trace Manning Construction. Call (850) 716-3740 or send your project details online.">
+<meta name="theme-color" content="#8b1a1a">
 <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
 <!-- PREVIEW BANNER: delete this line when the real content is in -->
@@ -21,6 +26,7 @@
       <a href="services.html">Services</a>
       <a href="projects.html">Projects</a>
       <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
       <a href="contact.html" aria-current="page">Get a quote</a>
     </nav>
     <a class="btn btn-small header-call" href="tel:+18507163740">Call (850) 716-3740</a>
@@ -68,6 +74,26 @@
         </div>
       </div>
       <div class="field"><label for="details">Project details <span class="hint">(size, what you have in mind, budget if you know it)</span></label><textarea id="details" name="details" required></textarea></div>
+      <fieldset class="field-group">
+        <legend>Free walkthrough <span class="hint">(optional)</span></legend>
+        <div class="row">
+          <div class="field"><label for="visit_date">Preferred date</label><input id="visit_date" name="visit_date" type="date"></div>
+          <div class="field"><label for="visit_time">Time of day</label>
+            <select id="visit_time" name="visit_time">
+              <option value="">Any time</option>
+              <option>Morning (7–10am)</option>
+              <option>Midday (10am–1pm)</option>
+              <option>Afternoon (1–5pm)</option>
+            </select>
+          </div>
+        </div>
+        <p class="hint" id="booking-link-wrap" hidden>Or <a id="booking-link" href="#">book a time on our calendar</a>.</p>
+      </fieldset>
+      <div class="field">
+        <label for="photos">Photos of the project <span class="hint">(optional, up to 6)</span></label>
+        <input id="photos" name="photos" type="file" accept="image/*" multiple>
+        <ul class="photo-previews" aria-live="polite"></ul>
+      </div>
       <div class="hp" aria-hidden="true"><label for="company">Leave this empty</label><input id="company" name="company" tabindex="-1" autocomplete="off"></div>
       <div><button class="btn" type="submit">Send quote request</button></div>
       <div class="form-status" role="status" tabindex="-1"></div>
@@ -102,6 +128,7 @@
           <li><a href="services.html">Services</a></li>
           <li><a href="projects.html">Projects</a></li>
           <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
           <li><a href="contact.html">Get a quote</a></li>
         </ul>
       </div>
@@ -109,6 +136,10 @@
     <div class="footer-base">© <span id="year">2026</span> Trace Manning Construction. License #GC-000000.</div>
   </div>
 </footer>
+<a class="float-call" href="tel:+18507163740" aria-label="Call (850) 716-3740">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+  <span>Call now</span>
+</a>
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 <script src="script.js"></script>
 </body>

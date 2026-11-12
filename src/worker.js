@@ -1,17 +1,32 @@
 // Cloudflare Worker: serves the website and handles the quote form.
 //
-// Settings it needs (set in Cloudflare, never in this file):
-//   RESEND_API_KEY  secret  - API key from resend.com
-//   TO_EMAIL        variable - where quote requests are sent (the owner's email)
-//   FROM_EMAIL      variable - sender address on the verified domain, e.g. quotes@yourdomain.com
+// Each quote request is:
+//   1. emailed to the owner with any photos attached (Resend), which is required
+//   2. texted to the owner's phone (Twilio), optional and skipped if not set up
+//   3. added as a row in a Google Sheet lead tracker, optional and skipped if not set up
+//
+// Settings (in Cloudflare: Worker > Settings > Variables and Secrets).
+// Secrets must NEVER be written in this repo.
+//   RESEND_API_KEY      secret    resend.com API key
+//   TO_EMAIL            variable  where quote emails go
+//   FROM_EMAIL          variable  sender on the verified domain, e.g. quotes@yourdomain.com
+//   TWILIO_ACCOUNT_SID  secret    (optional) text alerts
+//   TWILIO_AUTH_TOKEN   secret    (optional)
+//   TWILIO_FROM         variable  (optional) Twilio number, e.g. +18505550000
+//   ALERT_PHONE         variable  (optional) phone that gets the text, e.g. +18507163740
+//   SHEET_WEBHOOK_URL   secret    (optional) Google Apps Script web app URL (see tools/lead-sheet.gs)
+//   SHEET_SECRET        secret    (optional) shared password, must match the one in the script
+
+const MAX_PHOTOS = 6;
+const MAX_PHOTO_BYTES = 3 * 1024 * 1024; // per photo, after the browser shrinks it
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/quote") {
       if (request.method !== "POST") return json({ ok: false, error: "Use POST" }, 405);
-      return handleQuote(request, env);
+      return handleQuote(request, env, ctx);
     }
 
     // Everything else is a normal page or file from /public
@@ -19,7 +34,11 @@ export default {
   },
 };
 
-async function handleQuote(request, env) {
+async function handleQuote(request, env, ctx) {
+  if (Number(request.headers.get("content-length") || 0) > 25 * 1024 * 1024) {
+    return json({ ok: false, error: "Too large" }, 413);
+  }
+
   let data;
   try {
     data = await request.json();
@@ -38,6 +57,8 @@ async function handleQuote(request, env) {
     zip: clean(data.zip, 12),
     type: clean(data.type, 80),
     timeline: clean(data.timeline, 80),
+    visit_date: clean(data.visit_date, 20),
+    visit_time: clean(data.visit_time, 40),
     details: clean(data.details, 4000),
   };
 
@@ -51,6 +72,15 @@ async function handleQuote(request, env) {
     return json({ ok: false, error: "Form is not set up yet" }, 500);
   }
 
+  // Photos arrive as base64 JPEGs, already shrunk in the browser
+  const photos = (Array.isArray(data.photos) ? data.photos : [])
+    .slice(0, MAX_PHOTOS)
+    .filter((p) => p && typeof p.data === "string" && /^[A-Za-z0-9+/=]+$/.test(p.data))
+    .filter((p) => p.data.length * 0.75 <= MAX_PHOTO_BYTES)
+    .map((p, i) => ({ filename: `photo-${i + 1}.jpg`, content: p.data }));
+
+  const visit = [lead.visit_date && formatDate(lead.visit_date), lead.visit_time].filter(Boolean).join(", ");
+
   const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const rows = [
     ["Name", lead.name],
@@ -59,12 +89,15 @@ async function handleQuote(request, env) {
     ["ZIP", lead.zip],
     ["Project", lead.type],
     ["Start", lead.timeline],
+    ["Walkthrough", visit || "No preference"],
+    ["Photos", photos.length ? `${photos.length} attached` : "None"],
   ];
   const html = `
     <h2>New quote request</h2>
     <table cellpadding="6">${rows.map(([k, v]) => `<tr><td><b>${k}</b></td><td>${esc(v)}</td></tr>`).join("")}</table>
     <p><b>Details</b></p>
-    <p style="white-space:pre-wrap">${esc(lead.details)}</p>`;
+    <p style="white-space:pre-wrap">${esc(lead.details)}</p>
+    <p><a href="tel:${esc(lead.phone)}">Call ${esc(lead.name)}</a></p>`;
   const text = rows.map(([k, v]) => `${k}: ${v}`).join("\n") + `\n\nDetails:\n${lead.details}`;
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -80,6 +113,7 @@ async function handleQuote(request, env) {
       subject: `Quote request: ${lead.type || "project"} from ${lead.name}`,
       html,
       text,
+      attachments: photos.length ? photos : undefined,
     }),
   });
 
@@ -87,7 +121,47 @@ async function handleQuote(request, env) {
     console.log("Resend error", res.status, await res.text());
     return json({ ok: false, error: "Email failed" }, 502);
   }
+
+  // Extras run after the visitor gets their "sent" message, and never block it
+  ctx.waitUntil(sendText(env, lead, visit).catch((e) => console.log("Text alert failed", e)));
+  ctx.waitUntil(addToSheet(env, lead, photos.length).catch((e) => console.log("Lead sheet failed", e)));
+
   return json({ ok: true });
+}
+
+// Text alert via Twilio (skipped unless all four settings exist)
+async function sendText(env, lead, visit) {
+  if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_FROM || !env.ALERT_PHONE) return;
+  const body =
+    `New quote request: ${lead.name}, ${lead.phone}. ${lead.type || "Project"}` +
+    (lead.zip ? ` in ${lead.zip}` : "") +
+    (visit ? `. Walkthrough: ${visit}` : "") +
+    `. Full details in your email.`;
+  const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json`, {
+    method: "POST",
+    headers: {
+      Authorization: "Basic " + btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`),
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ To: env.ALERT_PHONE, From: env.TWILIO_FROM, Body: body.slice(0, 600) }),
+  });
+  if (!res.ok) console.log("Twilio error", res.status, await res.text());
+}
+
+// Lead tracker row via Google Apps Script (skipped unless set up)
+async function addToSheet(env, lead, photoCount) {
+  if (!env.SHEET_WEBHOOK_URL) return;
+  await fetch(env.SHEET_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ secret: env.SHEET_SECRET || "", ...lead, photos: photoCount }),
+  });
+}
+
+function formatDate(iso) {
+  const d = new Date(iso + "T12:00:00Z");
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
 }
 
 function json(body, status = 200) {

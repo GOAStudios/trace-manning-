@@ -1,6 +1,6 @@
 {
   // Cloudflare settings for the website.
-  "name": "contractor-site",
+  "name": "trace-manning-construction",
   "main": "src/worker.js",
   "compatibility_date": "2026-11-01",
   "assets": {
@@ -13,7 +13,11 @@
   "vars": {
     // Change these once the domain is bought and verified in Resend
     "TO_EMAIL": "owner@example.com",
-    "FROM_EMAIL": "quotes@example.com"
+    "FROM_EMAIL": "quotes@example.com",
+    // Text alerts (optional): fill in after setting up Twilio
+    "ALERT_PHONE": "+18507163740",
+    "TWILIO_FROM": ""
   }
-  // RESEND_API_KEY is a secret: add it in Cloudflare (Settings > Variables and Secrets), never here.
+  // Secrets (RESEND_API_KEY, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, SHEET_WEBHOOK_URL, SHEET_SECRET)
+  // are added in Cloudflare (Settings > Variables and Secrets), never here.
 }

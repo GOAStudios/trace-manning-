@@ -8,7 +8,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Trace Manning Construction | General Contractor in Northwest Florida">
+<meta property="og:description" content="Trace Manning Construction builds additions, remodels kitchens and baths, and builds new homes in Northwest Florida. Licensed and insured. Free estimates.">
+<meta name="theme-color" content="#8b1a1a">
 <link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"GeneralContractor","name":"Trace Manning Construction","telephone":"+18507163740","url":"https://www.example.com/","email":"office@example.com",
+"areaServed":[{"@type":"City","name":"Pensacola, FL"},{"@type":"City","name":"Gulf Breeze, FL"},{"@type":"City","name":"Navarre, FL"},{"@type":"City","name":"Milton, FL"},{"@type":"City","name":"Pace, FL"},{"@type":"City","name":"Crestview, FL"},{"@type":"City","name":"Fort Walton Beach, FL"},{"@type":"City","name":"Niceville, FL"},{"@type":"City","name":"Destin, FL"}],
+"address":{"@type":"PostalAddress","addressRegion":"FL","addressCountry":"US"},
+"openingHours":"Mo-Fr 07:00-17:00","priceRange":"$$"}
+</script>
 </head>
 <body>
 <!-- PREVIEW BANNER: delete this line when the real content is in -->
@@ -21,6 +31,7 @@
       <a href="services.html">Services</a>
       <a href="projects.html">Projects</a>
       <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
       <a href="contact.html">Get a quote</a>
     </nav>
     <a class="btn btn-small header-call" href="tel:+18507163740">Call (850) 716-3740</a>
@@ -73,7 +84,18 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Recent projects</h2>
+      <p class="lede">Drag the slider to see the before and after.</p>
     </div>
+    <div class="ba-feature"><figure class="ba-wrap">
+  <div class="ba" style="--pos:50%">
+    <div class="photo ba-before" role="img" aria-label="Before: kitchen remodel"><span>Before photo: kitchen remodel</span></div>
+    <div class="photo ba-after" role="img" aria-label="After: kitchen remodel"><span>After photo: kitchen remodel</span></div>
+    <div class="ba-handle" aria-hidden="true"></div>
+    <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Slide to compare before and after: kitchen remodel">
+    <span class="ba-tag ba-tag-l">Before</span><span class="ba-tag ba-tag-r">After</span>
+  </div>
+  <figcaption><strong>Open kitchen remodel</strong></figcaption>
+</figure></div>
     <div class="gallery">
       <figure><div class="photo " role="img" aria-label="kitchen remodel"><span>Photo: kitchen remodel</span></div><figcaption><strong>Open kitchen remodel</strong><span>Wall removed, new island and cabinets</span></figcaption></figure>
       <figure><div class="photo " role="img" aria-label="room addition"><span>Photo: room addition</span></div><figcaption><strong>Family room addition</strong><span>420 sq ft with vaulted ceiling</span></figcaption></figure>
@@ -139,6 +161,7 @@
           <li><a href="services.html">Services</a></li>
           <li><a href="projects.html">Projects</a></li>
           <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
           <li><a href="contact.html">Get a quote</a></li>
         </ul>
       </div>
@@ -146,6 +169,10 @@
     <div class="footer-base">© <span id="year">2026</span> Trace Manning Construction. License #GC-000000.</div>
   </div>
 </footer>
+<a class="float-call" href="tel:+18507163740" aria-label="Call (850) 716-3740">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+  <span>Call now</span>
+</a>
 <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 <script src="script.js"></script>
 </body>
